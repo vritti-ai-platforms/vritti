@@ -1,0 +1,21 @@
+# Project repos (cloned separately)
+api-nexus/
+api-sdk/
+auth-microfrontend/
+cloud-microfrontend/
+developer-docs/
+docs/
+infisical-secret-manager/
+infrastructure/
+landing/
+logos/
+memorybank/
+quantum-ui/
+reports/
+slicingpie/
+web-nexus/
+
+# Local/personal files
+.DS_Store
+.claude/settings.local.json
+.playwright-mcp/

@@ -1,0 +1,22 @@
+{
+  "folders": [
+    {
+      "name": "web-nexus",
+      "path": "web-nexus"
+    },
+    {
+      "name": "auth-microfrontend",
+      "path": "auth-microfrontend"
+    },
+    {
+      "name": "api-nexus",
+      "path": "api-nexus"
+    },
+    {
+      "path": "../../.claude/agents"
+    }
+  ],
+  "extensions": {
+    "recommendations": []
+  }
+}
