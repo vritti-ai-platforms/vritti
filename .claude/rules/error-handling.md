@@ -8,7 +8,7 @@ globs: api-nexus/src/**/*.ts
 Import exceptions from `@vritti/api-sdk`, NOT `@nestjs/common`.
 
 ```typescript
-import { BadRequestException, UnauthorizedException, NotFoundException } from '@vritti/api-sdk';
+import { BadRequestException, ConflictException, NotFoundException, UnauthorizedException } from '@vritti/api-sdk';
 ```
 
 ## Patterns
@@ -51,3 +51,16 @@ throw new BadRequestException({
 | Resource not found | `throw new NotFoundException('User not found.')` |
 | Form field error with heading | `{ label: '...', detail: '...', errors: [{ field, message }] }` |
 | Rich error with heading (no field) | `{ label: '...', detail: '...' }` |
+| Duplicate resource (signup, create) | `throw new ConflictException({ label: '...', detail: '...' })` |
+
+## Frontend — check status code, not error strings
+
+```typescript
+// WRONG — fragile string matching
+if (errorMessage.includes('already exists')) { ... }
+
+// CORRECT — check HTTP status from AxiosError
+onError: (error) => {
+  setShowLoginButton(error.response?.status === 409);
+}
+```

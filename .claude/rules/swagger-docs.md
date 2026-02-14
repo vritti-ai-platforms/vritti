@@ -52,11 +52,33 @@ export class ExampleController {
 }
 ```
 
+## ApiResponse must use `type:` — no inline schemas
+
+```typescript
+// WRONG — inline schema
+ApiResponse({
+  status: 200,
+  schema: {
+    type: 'object',
+    properties: {
+      accessToken: { type: 'string' },
+      expiresIn: { type: 'number' },
+    },
+  },
+})
+
+// CORRECT — reference the response DTO
+ApiResponse({ status: 200, description: 'Token recovered.', type: TokenResponse })
+```
+
+Import response DTOs from `dto/response/` and entity DTOs from `dto/entity/`.
+
 ## Rules
 
 - **Naming**: `Api` + PascalCase method name (e.g., `ApiSignup`, `ApiGetToken`, `ApiForgotPassword`)
 - **Class-level stays on controller**: `@ApiTags()`, `@ApiBearerAuth()` (when all endpoints need it)
 - **Method-level goes to docs**: `@ApiOperation`, `@ApiBody`, `@ApiResponse`, `@ApiParam`, `@ApiQuery`, `@ApiHeader`, `@ApiProduces`
 - **Method-level `@ApiBearerAuth()`** goes to docs when only some endpoints need it
+- **ApiResponse `type:`** must reference a response DTO class — no inline `schema:` objects
 - When adding a new endpoint, ALWAYS create the doc decorator in the `docs/` file first
 - One function per endpoint, one file per controller
