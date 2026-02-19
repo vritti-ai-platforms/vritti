@@ -15,6 +15,10 @@
           {
             "type": "command",
             "command": "FILE=\"$CLAUDE_FILE_PATH\"; if [[ \"$FILE\" == *src/modules/* || \"$FILE\" == *src/services/* ]] && grep -qE \"import.*\\b(BadRequestException|UnauthorizedException|NotFoundException|ConflictException|ForbiddenException)\\b.*from '@nestjs/common'\" \"$FILE\" 2>/dev/null; then echo '❌ BLOCKED: Import exceptions from @vritti/api-sdk, NOT @nestjs/common' >&2; exit 1; fi; exit 0"
+          },
+          {
+            "type": "command",
+            "command": "FILE=\"$CLAUDE_FILE_PATH\"; if [[ \"$FILE\" == *.controller.ts ]] && grep -nE '^[^/]*return\\s+await\\s+' \"$FILE\" 2>/dev/null | head -3 | grep -q '.'; then echo '⚠️  WARNING: Avoid \"return await\" in controllers unless inside try-catch. Just return the Promise directly for better performance.' >&2; fi; exit 0"
           }
         ]
       }

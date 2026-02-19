@@ -23,6 +23,39 @@ Controllers are a thin HTTP layer. They handle request/response concerns ONLY.
 - Array operations (`.find()`, `.filter()`, `.map()`)
 - Direct database access
 
+## One controller, one service
+
+Each controller should inject ONLY its primary service (the service matching the controller name). If functionality from other services is needed, inject those services into the primary service, not the controller.
+
+```typescript
+// WRONG — multiple services injected in controller
+@Controller('onboarding')
+export class OnboardingController {
+  constructor(
+    private readonly onboardingService: OnboardingService,
+    private readonly emailVerificationService: EmailVerificationService,
+    private readonly mobileVerificationService: MobileVerificationService,
+  ) {}
+}
+
+// CORRECT — only primary service injected
+@Controller('onboarding')
+export class OnboardingController {
+  constructor(
+    private readonly onboardingService: OnboardingService,
+  ) {}
+}
+
+// OnboardingService handles delegation
+@Injectable()
+export class OnboardingService {
+  constructor(
+    private readonly emailVerificationService: EmailVerificationService,
+    private readonly mobileVerificationService: MobileVerificationService,
+  ) {}
+}
+```
+
 ## Pattern
 
 ```typescript
@@ -69,6 +102,43 @@ Available decorators from `@vritti/api-sdk`:
 - `@Onboarding()` — allows onboarding session tokens
 
 Use `@Req()` only when no decorator exists (e.g., reading cookies by name).
+
+## Async/await pattern — avoid unnecessary `return await`
+
+Controllers should NOT use `await` before `return` when just passing through a service call. NestJS automatically awaits returned Promises.
+
+```typescript
+// WRONG — unnecessary await creates extra microtask
+@Get('status')
+async getStatus(@UserId() userId: string): Promise<StatusDto> {
+  this.logger.log(`GET /auth/status - User: ${userId}`);
+  return await this.authService.getStatus(userId);
+}
+
+// CORRECT — just return the Promise directly
+@Get('status')
+async getStatus(@UserId() userId: string): Promise<StatusDto> {
+  this.logger.log(`GET /auth/status - User: ${userId}`);
+  return this.authService.getStatus(userId);
+}
+
+// CORRECT — await IS needed when doing work after
+@Post('set-password')
+async setPassword(@UserId() userId: string, @Body() dto: SetPasswordDto): Promise<MessageDto> {
+  this.logger.log(`POST /auth/set-password - User: ${userId}`);
+
+  await this.authService.setPassword(userId, dto.password);
+
+  return {
+    success: true,
+    message: 'Password set successfully',
+  };
+}
+```
+
+**Rule:** Only use `await` if you need to do work AFTER the async operation completes. Otherwise, return the Promise directly.
+
+**Exception:** `return await` is allowed inside try-catch blocks for proper error handling.
 
 ## Import exceptions from `@vritti/api-sdk`
 
