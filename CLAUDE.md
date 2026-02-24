@@ -6,9 +6,10 @@ This is a multi-project workspace. Each subfolder is an independent git repo.
 
 | Folder | Stack | Purpose |
 |--------|-------|---------|
-| `api-nexus/` | NestJS + Fastify + Prisma | Backend API |
+| `cloud-server/` | NestJS + Fastify + Drizzle | Cloud backend API |
+| `api-nexus/` | NestJS + Fastify + Drizzle | Nexus backend API (web-nexus) |
 | `api-sdk/` | NestJS library | Shared server SDK (@vritti/api-sdk) |
-| `auth-microfrontend/` | React + Vite | Auth UI microfrontend |
+| `cloud-web/` | React + Rsbuild | Standalone auth + account web app |
 | `cloud-microfrontend/` | React + Vite | Cloud dashboard microfrontend |
 | `quantum-ui/` | React + Tailwind v4 | Shared component library (@vritti/quantum-ui) |
 | `web-nexus/` | React + Vite | Host/container app |
@@ -19,10 +20,10 @@ This is a multi-project workspace. Each subfolder is an independent git repo.
 ## Subagent Routing
 
 When working across projects, use the appropriate specialized agent:
-- **api-nexus work** → `vritti-api-nexus-agent`
+- **cloud-server work** → `vritti-api-nexus-agent`
 - **quantum-ui work** → `quantum-ui-architect`
 - **@vritti/api-sdk work** → `api-sdk-maintainer`
-- **Frontend UI work** (auth-microfrontend, cloud-microfrontend, web-nexus) → `vritti-ui-builder`
+- **Frontend UI work** (cloud-web, cloud-microfrontend, web-nexus) → `vritti-ui-builder`
 - **Postman collection sync** → `postman-collection-syncer`
 
 ## Cross-Project Conventions

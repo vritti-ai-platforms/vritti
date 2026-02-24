@@ -10,6 +10,36 @@ globs: auth-microfrontend/src/**/*.{ts,tsx}, cloud-microfrontend/src/**/*.{ts,ts
 - Do NOT install shadcn directly in microfrontends — use quantum-ui exports
 - Import from specific paths: `import { Button } from '@vritti/quantum-ui/Button'`
 
+## Button — never use HTML `<button>`
+- ALWAYS use `<Button>` from `@vritti/quantum-ui/Button`, never raw `<button>`
+- For ghost/link-style actions: `<Button variant="ghost">` or `<Button variant="link">`
+- For icon-only buttons: `<Button variant="ghost" size="icon">`
+
+```tsx
+// WRONG
+<button onClick={onBack} className="text-primary">Back</button>
+<button type="submit">Submit</button>
+
+// CORRECT
+import { Button } from '@vritti/quantum-ui/Button';
+<Button variant="ghost" onClick={onBack}>Back</Button>
+<Button type="submit">Submit</Button>
+```
+
+## Spinner — never use Loader2
+- ALWAYS use `<Spinner>` from `@vritti/quantum-ui/Spinner`, never `Loader2` from lucide-react
+- Spinner already includes `animate-spin` — just set size and color via className
+
+```tsx
+// WRONG
+import { Loader2 } from 'lucide-react';
+<Loader2 className="h-8 w-8 animate-spin text-primary" />
+
+// CORRECT
+import { Spinner } from '@vritti/quantum-ui/Spinner';
+<Spinner className="size-8 text-primary" />
+```
+
 ## Icons
 - Use lucide-react icons, NOT custom inline SVG icons
 - Common status icons: `CheckCircle2` (success), `AlertCircle` (error), `Info` (info), `TriangleAlert` (warning)
