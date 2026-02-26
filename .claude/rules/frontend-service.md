@@ -43,3 +43,25 @@ export const login = (data: LoginDto): Promise<LoginResponse> => { ... }
 // CORRECT
 export function login(data: LoginDto): Promise<LoginResponse> { ... }
 ```
+
+## Success messages — prefer backend over frontend
+
+Do not pass `successMessage` in the axios config. Let the backend include `message` in the response body — the axios interceptor reads `response.data.message` automatically and shows the toast.
+
+```typescript
+// WRONG — hardcoded success message in frontend service
+export function createOrganization(data: CreateOrgDto): Promise<OrgListItem> {
+  return axios
+    .post<OrgListItem>('cloud-api/organizations', data, { successMessage: 'Organization created successfully' })
+    .then((r) => r.data);
+}
+
+// CORRECT — backend response includes { ...data, message: 'Done' }, axios handles the toast
+export function createOrganization(data: CreateOrgDto): Promise<OrgListItem> {
+  return axios.post<OrgListItem>('cloud-api/organizations', data).then((r) => r.data);
+}
+```
+
+## TS80006 hint — expected, not an error
+
+TypeScript may suggest "This may be converted to an async function" on service functions that return a Promise chain. This is intentional — ignore it. The no-async/await convention takes precedence.
