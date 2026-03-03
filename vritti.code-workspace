@@ -1,16 +1,12 @@
 {
 	"folders": [
 		{
-			"name": "web-nexus",
-			"path": "web-nexus"
+			"name": "cloud-web",
+			"path": "cloud-web"
 		},
 		{
-			"name": "auth-microfrontend",
-			"path": "auth-microfrontend"
-		},
-		{
-			"name": "api-nexus",
-			"path": "api-nexus"
+			"name": "cloud-server",
+			"path": "cloud-server"
 		},
 		{
 			"path": "api-sdk"
